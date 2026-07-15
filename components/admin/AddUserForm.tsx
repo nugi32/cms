@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAdminAction } from "@/app/admin/actions";
 
 export default function AddUserForm() {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
@@ -39,12 +41,22 @@ export default function AddUserForm() {
       </div>
       <div className="field-group">
         <label className="field-label">Password (optional)</label>
-        <input
-          name="password"
-          type="password"
-          className="field-input"
-          placeholder="Leave blank for GitHub-only sign-in"
-        />
+        <div className="field-input-wrap">
+          <input
+            name="password"
+            type={showPassword ? "text" : "password"}
+            className="field-input"
+            placeholder="Leave blank for GitHub-only sign-in"
+          />
+          <button
+            type="button"
+            className="field-toggle"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
       </div>
       {error && <p className="field-error">{error}</p>}
       <button type="submit" disabled={pending} className="btn btn-primary">

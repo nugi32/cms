@@ -1,6 +1,12 @@
 "use server";
 
-import { countAdmins, createAdminWithPassword, findAdminByEmail } from "@/lib/admins";
+import {
+  claimFirstAdminSetup,
+  countAdmins,
+  createAdminWithPassword,
+  findAdminByEmail,
+  releaseFirstAdminSetup,
+} from "@/lib/admins";
 import { signIn } from "@/lib/auth";
 
 export async function registerFirstAdminAction(formData: FormData) {
@@ -18,22 +24,36 @@ export async function registerFirstAdminAction(formData: FormData) {
     return { error: "Password must be at least 8 characters." };
   }
 
-  // Re-check here too (not just on the page) in case two people load the
-  // register page at the same moment.
-  const total = await countAdmins();
-  if (total > 0) {
-    return {
-      error: "Registration is closed. Ask an existing admin to add your account from /admin/users.",
-    };
+  const claimSucceeded = await claimFirstAdminSetup();
+
+  try {
+    // Re-check here too (not just on the page) in case two people load the
+    // register page at the same moment.
+    const total = await countAdmins();
+    if (total > 0) {
+      return {
+        error: "Registration is closed. Ask an existing admin to add your account from /admin/users.",
+      };
+    }
+
+    const existing = await findAdminByEmail(email);
+    if (existing) {
+      return { error: "An account with that email already exists." };
+    }
+
+    if (!claimSucceeded) {
+      return {
+        error: "Registration is already in progress. Please wait a moment and try again.",
+      };
+    }
+
+    await createAdminWithPassword(email, password);
+
+    // Signs the brand-new admin in and redirects to /admin.
+    await signIn("credentials", { email, password, redirectTo: "/admin" });
+  } finally {
+    if (claimSucceeded) {
+      await releaseFirstAdminSetup();
+    }
   }
-
-  const existing = await findAdminByEmail(email);
-  if (existing) {
-    return { error: "An account with that email already exists." };
-  }
-
-  await createAdminWithPassword(email, password);
-
-  // Signs the brand-new admin in and redirects to /admin.
-  await signIn("credentials", { email, password, redirectTo: "/admin" });
 }

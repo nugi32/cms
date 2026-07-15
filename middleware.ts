@@ -11,6 +11,8 @@ export default auth((req) => {
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
+
+  return NextResponse.next();
 });
 
 export const config = {

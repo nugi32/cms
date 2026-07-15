@@ -1,12 +1,6 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
-import {
-  verifyAdminCredentials,
-  findAdminByEmail,
-  createAdminEmailOnly,
-  countAdmins,
-} from "./admins";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -22,6 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
+        const { verifyAdminCredentials } = await import("./admins");
         // Already validated against the "admins" collection - if this
         // returns null, NextAuth rejects the sign-in.
         return verifyAdminCredentials(
@@ -44,6 +39,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!user.email) return false;
 
       if (account?.provider === "github") {
+        const { findAdminByEmail, countAdmins, createAdminEmailOnly } =
+          await import("./admins");
         const existing = await findAdminByEmail(user.email);
         if (existing) return true;
 

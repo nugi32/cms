@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, type Filter } from "mongodb";
 import bcrypt from "bcryptjs";
 import { getDb } from "./mongodb";
 
@@ -13,6 +13,28 @@ export interface AdminUser {
 async function admins() {
   const db = await getDb();
   return db.collection("admins");
+}
+
+async function adminSetupState() {
+  const db = await getDb();
+  return db.collection("admin_setup");
+}
+
+const FIRST_ADMIN_SETUP_ID = new ObjectId("000000000000000000000000");
+
+export async function claimFirstAdminSetup(): Promise<boolean> {
+  const collection = await adminSetupState();
+  const result = await collection.updateOne(
+    { _id: FIRST_ADMIN_SETUP_ID } as Filter<unknown>,
+    { $setOnInsert: { status: "in-progress", createdAt: new Date() } },
+    { upsert: true }
+  );
+  return result.upsertedCount === 1;
+}
+
+export async function releaseFirstAdminSetup() {
+  const collection = await adminSetupState();
+  await collection.deleteOne({ _id: FIRST_ADMIN_SETUP_ID } as Filter<unknown>);
 }
 
 /** How many admin accounts exist - 0 means the app hasn't been set up yet. */
