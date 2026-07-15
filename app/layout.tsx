@@ -31,7 +31,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          // Runs before paint so there's no flash of the wrong theme.
+          // Reads a previously saved choice, otherwise falls back to the
+          // OS-level preference.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('theme');var t=s||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className={`${fraunces.variable} ${inter.variable} ${mono.variable}`}>
         {children}
       </body>

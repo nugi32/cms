@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CollectionSchema } from "@/lib/schemas";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Header({ schemas }: { schemas: CollectionSchema[] }) {
   return (
@@ -14,6 +15,7 @@ export default function Header({ schemas }: { schemas: CollectionSchema[] }) {
               {s.label}
             </Link>
           ))}
+          <ThemeToggle />
         </nav>
       </div>
     </header>

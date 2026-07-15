@@ -21,12 +21,9 @@ export default async function CollectionPage({
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">{schema.label}</h1>
-        <Link
-          href={`/admin/${collection}/new`}
-          className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800"
-        >
+      <div className="admin-page-header">
+        <h1 className="admin-page-title font-display">{schema.label}</h1>
+        <Link href={`/admin/${collection}/new`} className="btn btn-primary">
           + New {schema.label}
         </Link>
       </div>

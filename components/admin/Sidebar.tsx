@@ -8,27 +8,59 @@ export default function Sidebar({ schemas }: { schemas: CollectionSchema[] }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-60 border-r bg-white min-h-screen p-4">
-      <Link href="/admin" className="block font-bold text-lg mb-6">
+    <aside className="admin-sidebar">
+      <Link href="/admin" className="admin-sidebar-logo font-display">
         CMS Admin
       </Link>
-      <nav className="space-y-1">
-        {schemas.map((s) => {
-          const href = `/admin/${s.name}`;
-          const active = pathname.startsWith(href);
-          return (
-            <Link
-              key={s.name}
-              href={href}
-              className={`block px-3 py-2 rounded-md text-sm ${
-                active ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              {s.label}
-            </Link>
-          );
-        })}
+
+      <nav className="admin-nav">
+        <span className="admin-nav-section-label">Overview</span>
+        <NavLink href="/admin" pathname={pathname} exact>
+          Dashboard
+        </NavLink>
+      </nav>
+
+      <nav className="admin-nav">
+        <span className="admin-nav-section-label">Collections</span>
+        {schemas.map((s) => (
+          <NavLink key={s.name} href={`/admin/${s.name}`} pathname={pathname}>
+            {s.label}
+          </NavLink>
+        ))}
+      </nav>
+
+      <nav className="admin-nav">
+        <span className="admin-nav-section-label">Developer</span>
+        <NavLink href="/admin/api-routes" pathname={pathname}>
+          API Routes
+        </NavLink>
+      </nav>
+
+      <nav className="admin-nav">
+        <span className="admin-nav-section-label">Account</span>
+        <NavLink href="/admin/users" pathname={pathname}>
+          Users
+        </NavLink>
       </nav>
     </aside>
+  );
+}
+
+function NavLink({
+  href,
+  pathname,
+  exact = false,
+  children,
+}: {
+  href: string;
+  pathname: string;
+  exact?: boolean;
+  children: React.ReactNode;
+}) {
+  const active = exact ? pathname === href : pathname.startsWith(href);
+  return (
+    <Link href={href} className={active ? "active" : ""}>
+      {children}
+    </Link>
   );
 }

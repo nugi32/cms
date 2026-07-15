@@ -27,7 +27,7 @@ export default function DeleteButton({
       type="button"
       onClick={handleDelete}
       disabled={isPending}
-      className="text-red-600 hover:underline text-sm disabled:opacity-50"
+      className="btn btn-danger btn-sm"
     >
       {isPending ? "Deleting..." : "Delete"}
     </button>

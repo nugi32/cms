@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getSchema, getRelationOptions } from "@/lib/cms-service";
 import DynamicForm from "@/components/admin/DynamicForm";
-import { createItemAction } from "../../actions";
+import { createItemAction } from "@/app/admin/actions";
 
 export default async function NewItemPage({
   params,
@@ -21,12 +21,16 @@ export default async function NewItemPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6">New {schema.label}</h1>
-      <DynamicForm
-        schema={schema}
-        action={createItemAction.bind(null, collection)}
-        relationOptions={relationOptions}
-      />
+      <div className="admin-page-header">
+        <h1 className="admin-page-title font-display">New {schema.label}</h1>
+      </div>
+      <div className="admin-card">
+        <DynamicForm
+          schema={schema}
+          action={createItemAction.bind(null, collection)}
+          relationOptions={relationOptions}
+        />
+      </div>
     </div>
   );
 }

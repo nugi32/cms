@@ -37,25 +37,19 @@ export default function DynamicForm({
   }
 
   return (
-    <form action={handleSubmit} className="space-y-5 max-w-xl bg-white border rounded-lg p-6">
+    <form action={handleSubmit} className="admin-form">
       {schema.fields.map((field) => (
-        <div key={field.name}>
-          <label className="block text-sm font-medium mb-1">
+        <div key={field.name} className="field-group">
+          <label className="field-label">
             {field.label}
-            {field.required && <span className="text-red-500"> *</span>}
+            {field.required && <span className="field-required"> *</span>}
           </label>
           {renderField(field, initialData[field.name], relationOptions[field.name])}
-          {errors[field.name] && (
-            <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
-          )}
+          {errors[field.name] && <p className="field-error">{errors[field.name]}</p>}
         </div>
       ))}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 disabled:opacity-50"
-      >
+      <button type="submit" disabled={pending} className="btn btn-primary">
         {pending ? "Saving..." : "Save"}
       </button>
     </form>
@@ -67,8 +61,6 @@ function renderField(
   value: any,
   options?: { id: string; label: string }[]
 ) {
-  const baseClass = "w-full border rounded-md px-3 py-2 text-sm";
-
   switch (field.type) {
     case "textarea":
       return (
@@ -76,7 +68,7 @@ function renderField(
           name={field.name}
           defaultValue={value ?? ""}
           rows={4}
-          className={baseClass}
+          className="field-textarea"
         />
       );
 
@@ -87,7 +79,7 @@ function renderField(
           name={field.name}
           defaultValue={value ?? ""}
           rows={8}
-          className={baseClass}
+          className="field-textarea"
         />
       );
 
@@ -97,7 +89,7 @@ function renderField(
           type="number"
           name={field.name}
           defaultValue={value ?? ""}
-          className={baseClass}
+          className="field-input"
         />
       );
 
@@ -107,7 +99,7 @@ function renderField(
           type="checkbox"
           name={field.name}
           defaultChecked={!!value}
-          className="h-5 w-5"
+          className="field-checkbox"
         />
       );
 
@@ -117,13 +109,13 @@ function renderField(
           type="date"
           name={field.name}
           defaultValue={value ? new Date(value).toISOString().slice(0, 10) : ""}
-          className={baseClass}
+          className="field-input"
         />
       );
 
     case "select":
       return (
-        <select name={field.name} defaultValue={value ?? ""} className={baseClass}>
+        <select name={field.name} defaultValue={value ?? ""} className="field-select">
           <option value="">Select...</option>
           {field.options?.map((opt) => (
             <option key={opt} value={opt}>
@@ -135,7 +127,7 @@ function renderField(
 
     case "relation":
       return (
-        <select name={field.name} defaultValue={value ?? ""} className={baseClass}>
+        <select name={field.name} defaultValue={value ?? ""} className="field-select">
           <option value="">Select...</option>
           {options?.map((opt) => (
             <option key={opt.id} value={opt.id}>
@@ -152,7 +144,7 @@ function renderField(
           name={field.name}
           defaultValue={value ?? ""}
           placeholder="https://..."
-          className={baseClass}
+          className="field-input"
         />
       );
 
@@ -163,7 +155,7 @@ function renderField(
           type="text"
           name={field.name}
           defaultValue={value ?? ""}
-          className={baseClass}
+          className="field-input"
         />
       );
   }
