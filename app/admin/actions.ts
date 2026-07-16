@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { del, list, put } from "@vercel/blob";
 import { createItem, updateItem, deleteItem } from "@/lib/cms-service";
 import { signOut } from "@/lib/auth";
 import {
@@ -10,6 +11,54 @@ import {
   countAdmins,
   deleteAdmin,
 } from "@/lib/admins";
+
+export async function uploadBlobAction(file: File) {
+  if (!file || typeof file.size !== "number") {
+    throw new Error("A file is required.");
+  }
+
+  try {
+    // NEW: Vercel Blob upload
+    const blob = await put(file.name, file, {
+      access: "public",
+      addRandomSuffix: true,
+    });
+    return blob;
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Image upload failed"
+    );
+  }
+}
+
+export async function listBlobsAction() {
+  try {
+    // NEW: Vercel Blob media manager
+    const result = await list({ limit: 1000 });
+    return result.blobs ?? [];
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Unable to list media files"
+    );
+  }
+}
+
+export async function deleteBlobAction(url: string) {
+  if (!url) {
+    return { error: "A blob URL is required." };
+  }
+
+  try {
+    // NEW: Vercel Blob delete from media manager
+    await del(url);
+    revalidatePath("/admin/media");
+    return { success: true };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Unable to delete media",
+    };
+  }
+}
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/admin/login" });

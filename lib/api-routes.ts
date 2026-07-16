@@ -25,6 +25,13 @@ export const customApiRoutes: CustomApiRoute[] = [
       "next to the generic collection routes (see app/api/posts/featured/route.ts).",
   },
 
+  {
+    method: "GET",
+    path: "/api/test",
+    description:
+      "Test route for demonstration purposes.",
+  },
+
   // Add your own here as you create new route files, e.g.:
   // {
   //   method: "GET",

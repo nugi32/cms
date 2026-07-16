@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   getSchema,
@@ -59,8 +60,14 @@ export default async function EntryDetailPage({
       )}
 
       {imageField && item[imageField] && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={item[imageField]} alt="" className="article-image" />
+        <Image
+          src={item[imageField]}
+          alt=""
+          width={1200}
+          height={800}
+          className="article-image"
+          unoptimized
+        />
       )}
 
       {summaryField && item[summaryField] && (

@@ -10,8 +10,8 @@ import {
   PanelLeftOpen,
   Book,
   Shield,
-  FileText,
-  Folder,
+  Server,
+  Image,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -54,12 +54,13 @@ export default function Sidebar({
       <nav className="admin-nav">
         {!collapsed && <span className="admin-nav-section-label">Collections</span>}
         {schemas.map((s) => (
-          <NavLink key={s.name} href={`/admin/${s.name}`} pathname={pathname} collapsed={collapsed} icon={<FileText size={16} />} label={s.label} />
+          <NavLink key={s.name} href={`/admin/${s.name}`} pathname={pathname} collapsed={collapsed} icon={<Server size={16} />} label={s.label} />
         ))}
       </nav>
 
       <nav className="admin-nav">
         {!collapsed && <span className="admin-nav-section-label">Developer</span>}
+        <NavLink href="/admin/media" pathname={pathname} collapsed={collapsed} icon={<Image size={16} />} label="Media" />
         <NavLink href="/admin/api-routes" pathname={pathname} collapsed={collapsed} icon={<Code2 size={16} />} label="API Routes" />
         <NavLink href="/admin/cors" pathname={pathname} collapsed={collapsed} icon={<Shield size={16} />} label="CORS" />
       </nav>

@@ -51,7 +51,8 @@ export const schemas: CollectionSchema[] = [
       { name: "slug", label: "Slug", type: "text", required: true },
       { name: "excerpt", label: "Excerpt", type: "textarea" },
       { name: "content", label: "Content", type: "richtext" },
-      { name: "coverImage", label: "Cover Image URL", type: "image" },
+      // NEW: Vercel Blob upload
+      { name: "coverImage", label: "Cover Image", type: "image" },
       {
         name: "category",
         label: "Category",
@@ -77,6 +78,25 @@ export const schemas: CollectionSchema[] = [
       { name: "description", label: "Description", type: "textarea" },
     ],
   },
+
+  {
+    name: "test",
+    label: "Test",
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+   
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: ["draft", "published"],
+      },
+      { name: "featured", label: "Featured", type: "boolean" },
+      { name: "publishDate", label: "Publish Date", type: "date" },
+    ],
+  },
+
+  
 
   // 👉 Add a new collection just by adding another object here, e.g.:
   // {
