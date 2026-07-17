@@ -599,6 +599,14 @@ a {
   color: var(--text);
 }
 
+.admin-page-subtitle {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-soft);
+  margin: 0;
+  max-width: 70ch;
+}
+
 .admin-section-title {
   font-size: 15px;
   font-weight: 600;
@@ -617,6 +625,53 @@ a {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
+}
+
+.docs-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+.docs-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.docs-text {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.docs-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-soft);
+}
+
+.docs-code {
+  display: block;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.docs-inline-code {
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
 }
 
 /* Stat grid (dashboard) */
